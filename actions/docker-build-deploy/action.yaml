@@ -25,12 +25,6 @@ inputs:
       type=sha
     description: docker-metadata formatted tags
 
-  flavor:
-    required: false
-    default: |
-      suffix=${{ github.sha }}-${{ env.DATES }}
-    description: Flavor of the image to deploy
-
 runs:
   using: "composite"
   steps:
@@ -53,7 +47,8 @@ runs:
       with:
         images: ${{ inputs.registry }}/${{ inputs.registry_org }}/${{ inputs.image_name }}
         tags: ${{ inputs.tags }}
-        flavor: ${{ inputs.flavor }}
+        flavor: |
+          suffix=${{ github.sha }}-${{ env.DATES }}
 
     - name: Deploy to registry
       uses: docker/build-push-action@v2
