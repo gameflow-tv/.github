@@ -1,7 +1,0 @@
-{
-  "name": "Cloud Run CD (dev)",
-  "description": "Cloud Run CD workflow template for backend services (dev).",
-  "iconName": "gameflow",
-  "categories": ["Dockerfile", "Go", "Kotlin", "TypeScript"],
-  "filePatterns": ["^Dockerfile"]
-}

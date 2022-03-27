@@ -1,0 +1,11 @@
+{
+    "name": "Gameflow Node.js CI",
+    "description": "Lints, formats and test the Node.js project",
+    "iconName": "node",
+    "categories": [
+        "Node.js"
+    ],
+    "filePatterns": [
+        "package.json$"
+    ]
+}

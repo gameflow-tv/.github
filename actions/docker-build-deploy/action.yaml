@@ -1,0 +1,63 @@
+name: docker build and deploy
+description: Builds and deploys a docker image
+
+inputs:
+  image_name:
+    required: true
+    description: Name of the image to deploy
+
+  service_account:
+    required: true
+    description: Service account to use for deployment
+
+  registry_org:
+    required: true
+    description: Registry organization to use for deployment
+
+  registry:
+    required: false
+    default: eu.gcr.io
+    description: Registry to use for deployment
+
+  tags:
+    required: false
+    default: |
+      type=sha
+    description: docker-metadata formatted tags
+
+  flavor:
+    required: false
+    default: |
+      suffix=${{ github.sha }}-${{ env.DATES }}
+    description: Flavor of the image to deploy
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+
+    - uses: google-github-actions/setup-gcloud@v0
+      with:
+        service_account_key: ${{ inputs.service_account }}
+        project_id: ${{ inputs.registry_org }}
+
+    - run: gcloud auth configure-docker -q
+      shell: bash
+
+    - run: echo "DATES=$(date "+%s")" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v3
+      with:
+        images: ${{ inputs.registry }}/${{ inputs.registry_org }}/${{ inputs.image_name }}
+        tags: ${{ inputs.tags }}
+        flavor: ${{ inputs.flavor }}
+
+    - name: Deploy to registry
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}

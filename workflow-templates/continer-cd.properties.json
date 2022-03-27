@@ -1,0 +1,11 @@
+{
+    "name": "Gameflow Containerized CD",
+    "description": "Builds and deploys a Docker image",
+    "iconName": "docker",
+    "categories": [
+        "Docker"
+    ],
+    "filePatterns": [
+        "^Dockerfile"
+    ]
+}

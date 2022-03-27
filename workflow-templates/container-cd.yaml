@@ -1,0 +1,54 @@
+name: Gameflow Containerized CD
+description: "Builds and deploys a Docker image"
+on:
+  push:
+    branches: [$default-branch]
+    tags:
+      - v*.*.*
+
+  release:
+    types: [published]
+
+jobs:
+  development:
+    runs-on: self-hosted
+    environment:
+      name: development
+      url: https://dev.gameflow.dev
+
+    steps:
+      - uses: gameflow-tv/.github/actions/docker-build-deploy
+        with:
+          image_name: ${{ github.event.repository.name }}
+          service_account: ${{ secrets.GCP_SA }}
+          registry_org: ${{ secrets.GCP_PROJECT_ID }}
+
+  staging:
+    runs-on: self-hosted
+    environment:
+      name: staging
+      url: https://stage.gameflow.dev
+
+    steps:
+      - uses: gameflow-tv/.github/actions/docker-build-deploy
+        with:
+          image_name: ${{ github.event.repository.name }}
+          service_account: ${{ secrets.GCP_SA }}
+          registry_org: ${{ secrets.GCP_PROJECT_ID }}
+          tags: |
+            type=semver,pattern={{raw}}
+
+  production:
+    runs-on: self-hosted
+    environment:
+      name: production
+      url: https://gameflow.tv
+
+    steps:
+      - uses: gameflow-tv/.github/actions/docker-build-deploy
+        with:
+          image_name: ${{ github.event.repository.name }}
+          service_account: ${{ secrets.GCP_SA }}
+          registry_org: ${{ secrets.GCP_PROJECT_ID }}
+          tags: |
+            type=semver,pattern={{raw}}
