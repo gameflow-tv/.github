@@ -17,7 +17,7 @@ jobs:
       url: https://dev.gameflow.dev
 
     steps:
-      - uses: gameflow-tv/.github/actions/docker-build-deploy
+      - uses: gameflow-tv/.github/actions/docker-build-deploy@main
         with:
           image_name: ${{ github.event.repository.name }}
           service_account: ${{ secrets.GCP_SA }}
@@ -30,7 +30,7 @@ jobs:
       url: https://stage.gameflow.dev
 
     steps:
-      - uses: gameflow-tv/.github/actions/docker-build-deploy
+      - uses: gameflow-tv/.github/actions/docker-build-deploy@main
         with:
           image_name: ${{ github.event.repository.name }}
           service_account: ${{ secrets.GCP_SA }}
@@ -45,7 +45,7 @@ jobs:
       url: https://gameflow.tv
 
     steps:
-      - uses: gameflow-tv/.github/actions/docker-build-deploy
+      - uses: gameflow-tv/.github/actions/docker-build-deploy@main
         with:
           image_name: ${{ github.event.repository.name }}
           service_account: ${{ secrets.GCP_SA }}
