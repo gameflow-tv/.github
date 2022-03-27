@@ -11,6 +11,7 @@ on:
 
 jobs:
   development:
+    if: github.ref == 'refs/heads/$default-branch'
     runs-on: self-hosted
     environment:
       name: development
@@ -24,6 +25,7 @@ jobs:
           registry_org: ${{ secrets.GCP_PROJECT_ID }}
 
   staging:
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: self-hosted
     environment:
       name: staging
@@ -39,6 +41,7 @@ jobs:
             type=semver,pattern={{raw}}
 
   production:
+    if: github.event_name == 'release' && github.event.action == 'published'
     runs-on: self-hosted
     environment:
       name: production
