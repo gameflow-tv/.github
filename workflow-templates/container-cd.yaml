@@ -1,5 +1,5 @@
 name: Gameflow Containerized CD
-description: "Builds and deploys a Docker image"
+
 on:
   push:
     branches: [$default-branch]
