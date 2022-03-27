@@ -9,6 +9,11 @@ on:
   release:
     types: [published]
 
+env:
+  registry: eu.gcr.io
+  image_name: ${{ github.event.repository.name }}
+  service_account: ${{ secrets.GCP_SA }}
+  
 jobs:
   development:
     if: github.ref == 'refs/heads/$default-branch'
@@ -17,12 +22,40 @@ jobs:
       name: development
       url: https://dev.gameflow.dev
 
+    env:
+      project_id: ${{ secrets.GCP_PROJECT_ID }}
+
     steps:
-      - uses: gameflow-tv/.github/actions/docker-build-deploy@main
+      - uses: actions/checkout@v2
+
+      - uses: google-github-actions/setup-gcloud@v0
         with:
-          image_name: ${{ github.event.repository.name }}
-          service_account: ${{ secrets.GCP_SA }}
-          registry_org: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ env.service_account }}
+          project_id: ${{ env.project_id }}
+
+      - run: gcloud auth configure-docker -q
+        shell: bash
+
+      - run: echo "DATES=$(date "+%s")" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.registry }}/${{ env.project_id }}/${{ env.image_name }}
+          tags: |
+            type=ref,event=branch
+          flavor: |
+            latest=auto
+            suffix=${{ github.sha }}-${{ env.DATES }}
+
+    - name: Deploy to registry
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
 
   staging:
     if: startsWith(github.ref, 'refs/tags/v')
@@ -31,14 +64,38 @@ jobs:
       name: staging
       url: https://stage.gameflow.dev
 
+    env:
+      project_id: ${{ secrets.GCP_PROJECT_ID }}
+
     steps:
-      - uses: gameflow-tv/.github/actions/docker-build-deploy@main
+      - uses: actions/checkout@v2
+
+      - uses: google-github-actions/setup-gcloud@v0
         with:
-          image_name: ${{ github.event.repository.name }}
-          service_account: ${{ secrets.GCP_SA }}
-          registry_org: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ env.service_account }}
+          project_id: ${{ env.project_id }}
+
+      - run: gcloud auth configure-docker -q
+
+      - run: echo "DATES=$(date "+%s")" >> $GITHUB_ENV
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.registry }}/${{ env.project_id }}/${{ env.image_name }}
           tags: |
             type=semver,pattern={{raw}}
+          flavor: |
+            latest=auto
+            suffix=${{ github.sha }}-${{ env.DATES }}
+
+    - name: Deploy to registry
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
 
   production:
     if: github.event_name == 'release' && github.event.action == 'published'
@@ -47,11 +104,35 @@ jobs:
       name: production
       url: https://gameflow.tv
 
+    env:
+      project_id: ${{ secrets.GCP_PROJECT_ID }}
+
     steps:
-      - uses: gameflow-tv/.github/actions/docker-build-deploy@main
+      - uses: actions/checkout@v2
+
+      - uses: google-github-actions/setup-gcloud@v0
         with:
-          image_name: ${{ github.event.repository.name }}
-          service_account: ${{ secrets.GCP_SA }}
-          registry_org: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ env.service_account }}
+          project_id: ${{ env.project_id }}
+
+      - run: gcloud auth configure-docker -q
+
+      - run: echo "DATES=$(date "+%s")" >> $GITHUB_ENV
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.registry }}/${{ env.project_id }}/${{ env.image_name }}
           tags: |
             type=semver,pattern={{raw}}
+          flavor: |
+            latest=auto
+            suffix=${{ github.sha }}-${{ env.DATES }}
+
+    - name: Deploy to registry
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
