@@ -8,7 +8,7 @@
 
 <br>
 <img src="https://static.gameflow.tv/onboarding_banner.png" width="500px">
-<br><br>
+<br>
 
 🌈 All contributors are welcome and dearly appreciated -- read the guidelines under each repository's `CONTRIBUTING.md`
 
