@@ -1,12 +1,4 @@
-<img src="https://static.gameflow.tv/brand/isolated_lockup_horizontal_pos_orange_tagline.png">
-
-## Hi there! 👋
-
-🙋 We're Gameflow, and we are creating a single home for all of esports.
-
-🧙‍♂️ Our goal is to contribute back to the community we've built our platform on top of. We want to share our knowledge and tools along the way!
-
-<br>
+<img src="https://static.gameflow.tv/brand/isolated_lockup_horizontal_pos_orange_tagline.png" height="50px">
 <img src="https://static.gameflow.tv/onboarding_banner.png" width="500px">
 <br>
 
