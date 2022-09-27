@@ -1,4 +1,4 @@
-# <img src="https://static.gameflow.tv/brand/isolated_lockup_horizontal_post_orange.svg#gh-dark-mode-only" height="50px"><img src="https://static.gameflow.tv/brand/isolated_lockup_horizontal_pos_black.svg#gh-light-mode-only" height="50px"></h1>
+# <img src="./lockup_light.svg#gh-dark-mode-only" height="50px"><img src="./lockup_dark.svg#gh-light-mode-only" height="50px"></h1>
 <br>
 
 
