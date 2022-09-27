@@ -1,4 +1,4 @@
-# ![Gameflow](./lockup_light.svg#gh-dark-mode-only)![Gameflow](./lockup_dark.svg#gh-light-mode-only)
+# ![Gameflow](./profile/lockup_light.svg#gh-dark-mode-only)![Gameflow](./profile/lockup_dark.svg#gh-light-mode-only)
 
 🌈 All contributors are welcome and dearly appreciated -- read the guidelines under each repository's `CONTRIBUTING.md`
 
